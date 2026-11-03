@@ -2,6 +2,16 @@
 
 A web app for editing and formatting WeChat articles.
 
+## Features
+
+- Markdown → WeChat article HTML with every element styled inline (WeChat strips `<style>` and `class`)
+- Three themes: 默认 / 优雅 / 科技
+- External links become superscript footnotes with a 「参考链接」 list (WeChat body links aren't clickable; `mp.weixin.qq.com` links are kept)
+- Raw HTML in Markdown is escaped as text
+- 「复制到公众号」 copies `text/html` via `ClipboardItem`, falling back to `document.execCommand('copy')`
+
+Core modules live in `src/lib/`: `convert.ts`, `themes.ts`, `clipboard.ts`.
+
 ## Tech stack
 
 - [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
