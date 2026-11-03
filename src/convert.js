@@ -64,11 +64,16 @@ export function applyInlineStyles(html, theme) {
  * @param {object} [options]
  * @param {object} [options.theme]  标签 → CSS 声明字符串
  * @param {boolean} [options.footnoteLinks=true]  外链转为文末脚注
+ * 原始 HTML 会被转义成文本，不会透传。
  * @returns {{ html: string, links: {text: string, href: string}[] }}
  */
 export function markdownToWechat(markdown, { theme = FALLBACK_THEME, footnoteLinks = true } = {}) {
   const links = [];
   const marked = new Marked({ gfm: true, breaks: false });
+
+  // Markdown 中的原始 HTML 一律按文本显示：既避免 <style> 之类吞掉后续内容，
+  // 也避免 <img onerror> 等在预览页里执行脚本。
+  marked.use({ renderer: { html: ({ text }) => escapeHtml(text) } });
 
   if (footnoteLinks) {
     marked.use({
@@ -83,7 +88,7 @@ export function markdownToWechat(markdown, { theme = FALLBACK_THEME, footnoteLin
     });
   }
 
-  let html = marked.parse(markdown ?? '');
+  let html = applyInlineStyles(marked.parse(markdown ?? ''), theme);
 
   if (links.length) {
     const items = links
@@ -92,5 +97,6 @@ export function markdownToWechat(markdown, { theme = FALLBACK_THEME, footnoteLin
     html += `<section style="margin-top:2em;padding-top:0.8em;border-top:1px solid #eee"><p style="font-size:14px;font-weight:bold;color:#666;margin:0 0 0.5em">参考链接</p>${items}</section>`;
   }
 
-  return { html: applyInlineStyles(html, theme), links };
+  // 脚注区块自带样式，在套主题之后拼接，避免被正文 p 的主题样式覆盖
+  return { html, links };
 }

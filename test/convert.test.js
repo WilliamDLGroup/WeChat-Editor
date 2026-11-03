@@ -24,6 +24,8 @@ test('外链转为上标编号，并在文末生成参考链接', () => {
   assert.match(html, /Claude<sup style="color:#576b95">\[1\]<\/sup>/);
   assert.match(html, /参考链接/);
   assert.match(html, /\[1\] Claude: https:\/\/claude\.ai/);
+  // 脚注条目保留自身的小字号样式，不被主题 p 样式覆盖
+  assert.match(html, /<p style="font-size:13px;line-height:1\.6;color:#888[^"]*">\[1\]/);
   // 公众号站内链接保留为 <a>
   assert.match(html, /<a href="https:\/\/mp\.weixin\.qq\.com\/s\/abc" style="/);
 });
@@ -56,6 +58,14 @@ test('isExternalLink 判定', () => {
 test('applyInlineStyles 不会误伤同字母开头的其他标签（如 <header>）', () => {
   const out = applyInlineStyles('<header><p>x</p></header>', {});
   assert.match(out, /^<header><p style=/);
+});
+
+test('原始 HTML 被转义为文本，不会吞掉后续内容或执行脚本', () => {
+  const md = '过滤 <style> 和 class\n\n<img src=x onerror="alert(1)">\n\n## 之后的标题';
+  const { html } = markdownToWechat(md);
+  assert.doesNotMatch(html, /<style|<img src=x/);
+  assert.match(html, /&lt;style&gt;/);
+  assert.match(html, /<h2 style="/);
 });
 
 test('空输入返回空字符串', () => {
