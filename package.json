@@ -1,0 +1,14 @@
+{
+  "name": "wechat-editor",
+  "version": "0.1.0",
+  "description": "Markdown → WeChat Official Account article HTML (inline styles)",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 5173"
+  },
+  "dependencies": {
+    "marked": "18.1.3"
+  }
+}
