@@ -23,6 +23,11 @@ body {
 }
 
 .app-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  align-items: center;
+  justify-content: space-between;
   padding: 12px 24px;
   background: #fff;
   border-bottom: 1px solid #e5e6eb;
@@ -32,6 +37,47 @@ body {
   margin: 0;
   font-size: 18px;
   color: #07c160;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+  font-size: 14px;
+  color: #646a73;
+}
+
+.toolbar-item {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.toolbar select {
+  padding: 4px 8px;
+  font: inherit;
+  border: 1px solid #e5e6eb;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.copy-button {
+  padding: 6px 14px;
+  font: inherit;
+  color: #fff;
+  cursor: pointer;
+  background: #07c160;
+  border: none;
+  border-radius: 6px;
+}
+
+.copy-button:hover {
+  background: #06ad56;
+}
+
+.copy-status:empty {
+  display: none;
 }
 
 .workspace {
@@ -71,7 +117,7 @@ body {
 
 .preview {
   max-width: 414px;
-  white-space: pre-wrap;
+  overflow: auto;
   overflow-wrap: anywhere;
 }
 
